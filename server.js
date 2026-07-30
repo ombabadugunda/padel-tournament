@@ -7,7 +7,15 @@ import { generateRound, standings, buildHistory } from './src/pairing.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
+// без кешу для статики: щоб оновлення долітали до телефонів одразу
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    etag: true,
+    lastModified: true,
+    maxAge: 0,
+    setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache'),
+  }),
+);
 
 const api = express.Router();
 
