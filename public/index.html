@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <meta name="theme-color" content="#0d1117" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Падел" />
+    <title>Падел турніри</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header id="topbar">
+      <button id="backBtn" class="icon-btn" hidden aria-label="Назад">‹</button>
+      <h1 id="title">Падел</h1>
+      <button id="actionBtn" class="icon-btn" hidden></button>
+    </header>
+
+    <main id="app"><div class="loader">Завантаження…</div></main>
+
+    <nav id="tabbar">
+      <button data-nav="home" class="active"><span>🏆</span>Турніри</button>
+      <button data-nav="players"><span>👥</span>Гравці</button>
+    </nav>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="modal"></dialog>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

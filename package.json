@@ -1,0 +1,21 @@
+{
+  "name": "padel-tournament",
+  "version": "1.0.0",
+  "description": "Програма для дружніх падел турнірів (Мексикано / Американо)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.0"
+  }
+}
