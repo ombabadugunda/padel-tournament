@@ -379,6 +379,7 @@ function squadHtml() {
         .map(
           (p) => `<div class="player-row">
             <div class="grow">${esc(p.name)}</div>
+            <button class="mini" data-act="renameInT" data-id="${p.id}" data-name="${esc(p.name)}">✎</button>
             <button class="mini" data-act="removeFromT" data-id="${p.id}">✕</button>
           </div>`,
         )
@@ -613,6 +614,16 @@ appEl.addEventListener('click', async (e) => {
         });
         renderTournament();
         break;
+      case 'renameInT': {
+        const nm = await promptName('Перейменувати: ' + el.dataset.name);
+        if (!nm) break;
+        await api('PATCH', '/players/' + el.dataset.id, { name: nm });
+        state.players = await api('GET', '/players');
+        state.t = await api('GET', '/tournaments/' + state.t.tournament.id);
+        renderTournament();
+        toast('Перейменовано');
+        break;
+      }
       case 'removeFromT':
         state.t = await api(
           'DELETE',
