@@ -267,7 +267,8 @@ function nameOf(id) {
 function roundHtml() {
   const { tournament: t, rounds } = state.t;
   if (!rounds.length) {
-    return `<div class="empty"><strong>Турнір готовий до старту</strong>${t.players?.length || ''}</div>
+    return `<div class="empty"><strong>Турнір готовий до старту</strong>
+        ${FMT[t.format]} · ${state.t.players.length} гравців · ${t.courts} корт${t.courts > 1 ? 'и' : ''} · до ${t.pointsPerGame} поінтів</div>
       <button class="btn" data-act="nextRound">Згенерувати 1-й раунд</button>`;
   }
   state.roundIdx = Math.min(state.roundIdx, rounds.length - 1);
