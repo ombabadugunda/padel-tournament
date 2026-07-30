@@ -251,6 +251,8 @@ api.delete('/tournaments/:id/players/:playerId', async (req, res) => {
 
 api.post('/tournaments/:id/rounds', async (req, res) => {
   const state = await loadTournament(req.params.id);
+  if (state.tournament.status === 'finished')
+    throw bad('Турнір завершено — щоб додати раунд, спершу відновіть його');
   const playerIds = state.players.map((p) => p.id);
   if (playerIds.length < 4) throw bad('Потрібно щонайменше 4 гравці');
 
@@ -302,6 +304,8 @@ api.delete('/tournaments/:id/rounds/last', async (req, res) => {
 /** Перегенерувати останній раунд (якщо жереб не сподобався). */
 api.post('/tournaments/:id/rounds/reshuffle', async (req, res) => {
   const state = await loadTournament(req.params.id);
+  if (state.tournament.status === 'finished')
+    throw bad('Турнір завершено — щоб перемішати жереб, спершу відновіть його');
   const last = state.rounds[state.rounds.length - 1];
   if (!last) throw bad('Немає раундів');
   if (last.matches.some((m) => m.scoreA != null || m.scoreB != null)) {

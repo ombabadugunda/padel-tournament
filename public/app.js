@@ -241,7 +241,7 @@ function renderTournament() {
     return;
   }
   const { tournament: t, players, rounds } = state.t;
-  titleEl.textContent = t.name;
+  titleEl.textContent = (t.status === 'finished' ? '🏁 ' : '') + t.name;
   actionBtn.hidden = false;
   actionBtn.textContent = '⋯';
 
@@ -264,12 +264,18 @@ function nameOf(id) {
   return p ? p.name : '—';
 }
 
+const FINISHED_NOTE = `<div class="byes" style="border-color:rgba(240,103,74,.4);color:var(--fg)">
+    🏁 Турнір завершено. Нові раунди не створюються.
+  </div>
+  <button class="btn sec" data-act="resume">Відновити турнір</button>`;
+
 function roundHtml() {
   const { tournament: t, rounds } = state.t;
+  const finished = t.status === 'finished';
   if (!rounds.length) {
-    return `<div class="empty"><strong>Турнір готовий до старту</strong>
+    return `<div class="empty"><strong>${finished ? 'Турнір завершено' : 'Турнір готовий до старту'}</strong>
         ${FMT[t.format]} · ${state.t.players.length} гравців · ${t.courts} корт${t.courts > 1 ? 'и' : ''} · до ${t.pointsPerGame} поінтів</div>
-      <button class="btn" data-act="nextRound">Згенерувати 1-й раунд</button>`;
+      ${finished ? FINISHED_NOTE : '<button class="btn" data-act="nextRound">Згенерувати 1-й раунд</button>'}`;
   }
   state.roundIdx = Math.min(state.roundIdx, rounds.length - 1);
   const r = rounds[state.roundIdx];
@@ -306,14 +312,16 @@ function roundHtml() {
       Автоматично рахувати рахунок суперника до ${t.pointsPerGame}
     </label>
     ${
-      isLast
-        ? `<button class="btn" data-act="nextRound" ${filled ? '' : 'disabled'}>Наступний раунд →</button>
+      !isLast
+        ? ''
+        : finished
+          ? FINISHED_NOTE
+          : `<button class="btn" data-act="nextRound" ${filled ? '' : 'disabled'}>Наступний раунд →</button>
            <div class="btn-row">
              ${untouched ? '<button class="btn sec sm" style="flex:1" data-act="reshuffle">🔀 Перемішати</button>' : ''}
              <button class="btn danger sm" style="flex:1" data-act="delRound">Видалити раунд</button>
            </div>
            ${filled ? '' : '<div class="meta" style="text-align:center;margin-top:10px">Внесіть рахунок усіх матчів, щоб створити наступний раунд</div>'}`
-        : ''
     }`;
 }
 
@@ -591,6 +599,11 @@ appEl.addEventListener('click', async (e) => {
         state.roundIdx = state.t.rounds.length - 1;
         renderTournament();
         window.scrollTo({ top: 0 });
+        break;
+      case 'resume':
+        state.t = await api('PATCH', '/tournaments/' + state.t.tournament.id, { status: 'active' });
+        renderTournament();
+        toast('Турнір відновлено');
         break;
       case 'reshuffle':
         state.t = await api('POST', `/tournaments/${state.t.tournament.id}/rounds/reshuffle`);
