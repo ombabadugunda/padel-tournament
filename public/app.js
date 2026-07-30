@@ -357,7 +357,7 @@ function tableHtml() {
     </div>
     <table class="standings">
       <thead><tr>
-        <th></th><th>Гравець</th><th>І</th><th>В</th><th>Мʼячі</th><th>±</th>
+        <th></th><th>Гравець</th><th>І</th><th>В</th><th>Н</th><th>П</th><th>Мʼячі</th><th>±</th>
       </tr></thead>
       <tbody>
         ${rows
@@ -367,6 +367,8 @@ function tableHtml() {
           <td>${esc(r.name)}</td>
           <td>${r.gamesPlayed}</td>
           <td class="${state.sortBy === 'wins' ? 'hl' : ''}">${r.wins}</td>
+          <td class="${r.draws ? '' : 'zero'}">${r.draws}</td>
+          <td class="${r.losses ? '' : 'zero'}">${r.losses}</td>
           <td class="${state.sortBy === 'points' ? 'hl' : ''}">${r.pointsFor}</td>
           <td style="color:${r.diff > 0 ? 'var(--accent)' : r.diff < 0 ? 'var(--red)' : 'var(--fg-dim)'}">${r.diff > 0 ? '+' : ''}${r.diff}</td>
         </tr>`,
@@ -374,7 +376,7 @@ function tableHtml() {
           .join('')}
       </tbody>
     </table>
-    <div class="legend">І — зіграно ігор · В — виграно ігор · Мʼячі — набрано поінтів · ± — різниця мʼячів</div>`;
+    <div class="legend">І — зіграно · В — виграно · Н — нічиї · П — програно · Мʼячі — набрано поінтів · ± — різниця мʼячів</div>`;
 }
 
 function squadHtml() {

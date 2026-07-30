@@ -569,10 +569,21 @@ table.standings td {
 table.standings td:nth-child(2) {
   text-align: left;
   font-weight: 550;
-  max-width: 40vw;
+  max-width: 30vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+table.standings th,
+table.standings td {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+table.standings td.zero {
+  color: var(--fg-dim);
+  opacity: 0.5;
 }
 
 table.standings td.rank {
